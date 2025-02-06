@@ -25,6 +25,7 @@ const data = ref<IDataDashBoard | null>(null)
 const loading = ref<boolean>(true)
 const route = useRoute()
 const gerency = ref(route.params.gerency)
+const response = ref()
 const year = ref(route.params.year)
 const week = ref(route.params.week)
 
@@ -44,11 +45,16 @@ onMounted(() => {
 const getDataDashBoard = async () => {
   loading.value = true
   try {
-    //const response = await $api.get<IDataDashBoard>('/dashboard-gerencia/GERD003/2025/5')
-    const response = await $api.get<IDataDashBoard>(
-      '/dashboard-gerencia/' + gerency.value + '/' + year.value + '/' + week.value,
-    ) //esto sera dinamico
-    data.value = response.data
+    if (gerency.value && year.value && week.value) {
+      response.value = await $api.get<IDataDashBoard>(
+        '/dashboard-gerencia/' + gerency.value + '/' + year.value + '/' + week.value,
+      )
+    } else {
+      response.value = await $api.get<IDataDashBoard>('/dashboard-gerencia/GERD003/2025/5')
+    }
+    //
+    //esto sera dinamico
+    data.value = response.value.data
     console.log('INFO')
     console.log('data: ' + data.value?.gerencia)
   } catch (err) {
