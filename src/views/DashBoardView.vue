@@ -52,8 +52,7 @@ const getDataDashBoard = async () => {
     } else {
       response.value = await $api.get<IDataDashBoard>('/dashboard-gerencia/GERD003/2025/5')
     }
-    //
-    //esto sera dinamico
+
     data.value = response.value.data
     console.log('INFO')
     console.log('data: ' + data.value?.gerencia)

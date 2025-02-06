@@ -18,9 +18,9 @@ const router = createRouter({
       component: DashBoardView,
     },
     {
-      path: '/:gerency/:year/:week', // Ruta con parámetro dinámico
+      path: '/:gerency/:year/:week', //esta es la ruta dinamica
       name: 'DashBoardParameters',
-      component: DashBoardView, // Asegúrate de importar el componente UserView
+      component: DashBoardView, 
     },
   ],
 })
