@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import DashBoardView from '@/views/DashBoardView.vue';
+import DashBoardView from '@/views/DashBoardView.vue'
 
-
-import { type IStaticMethods } from "preline/preline";
+import { type IStaticMethods } from 'preline/preline'
 declare global {
   interface Window {
-    HSStaticMethods: IStaticMethods;
+    HSStaticMethods: IStaticMethods
   }
 }
 
@@ -19,12 +18,9 @@ const router = createRouter({
       component: DashBoardView,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/:gerency/:year/:week', // Ruta con parámetro dinámico
+      name: 'DashBoardParameters',
+      component: DashBoardView, // Asegúrate de importar el componente UserView
     },
   ],
 })
@@ -32,9 +28,9 @@ const router = createRouter({
 router.afterEach((to, from, failure) => {
   if (!failure) {
     setTimeout(() => {
-      window.HSStaticMethods.autoInit();
+      window.HSStaticMethods.autoInit()
     }, 100)
   }
-});
+})
 
 export default router

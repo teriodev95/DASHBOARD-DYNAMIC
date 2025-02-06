@@ -9,7 +9,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <ul class="max-w-xs flex flex-col">
+  <ul class="flex flex-col">
     <li
       class="inline-flex items-center gap-x-2 py-4 px-4 text-sm font-medium bg-secondary text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
     >

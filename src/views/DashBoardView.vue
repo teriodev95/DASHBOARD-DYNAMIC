@@ -6,6 +6,7 @@
  */
 
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import type { IDataDashBoard } from '../Types/DataDashboard'
 import $api from '../Services/Axios'
 
@@ -22,12 +23,17 @@ import LoaderComponent from '@/components/LoaderComponent.vue'
  */
 const data = ref<IDataDashBoard | null>(null)
 const loading = ref<boolean>(true)
+const route = useRoute()
+const gerency = ref(route.params.gerency)
+const year = ref(route.params.year)
+const week = ref(route.params.week)
 
 /*
  *
  * LIFECYCLE
  */
 onMounted(() => {
+  console.log(gerency.value)
   getDataDashBoard()
 })
 
@@ -38,7 +44,10 @@ onMounted(() => {
 const getDataDashBoard = async () => {
   loading.value = true
   try {
-    const response = await $api.get<IDataDashBoard>('/dashboard-gerencia/GERD003/2025/5') //esto sera dinamico
+    //const response = await $api.get<IDataDashBoard>('/dashboard-gerencia/GERD003/2025/5')
+    const response = await $api.get<IDataDashBoard>(
+      '/dashboard-gerencia/' + gerency.value + '/' + year.value + '/' + week.value,
+    ) //esto sera dinamico
     data.value = response.data
     console.log('INFO')
     console.log('data: ' + data.value?.gerencia)
@@ -80,7 +89,9 @@ const { formatCurrency } = useCurrency()
           <AvatarComponent :gerencia="data?.gerencia"></AvatarComponent>
         </div>
 
-        <div class="grid grid-cols-3 gap-3">
+        <div
+          class="grid grid-cols-1 gap-3 md:grid md:grid-cols-3 md:gap-3 sm:grid sm:grid-cols-2 sm:gap-3"
+        >
           <BlueCardComponent :title="'Semana'" :amount="data?.semana"> </BlueCardComponent>
           <BlueCardComponent :title="'Año'" :amount="data?.anio"></BlueCardComponent>
           <BlueCardComponent :title="'Clientes'" :amount="data?.clientes"></BlueCardComponent>
@@ -92,17 +103,17 @@ const { formatCurrency } = useCurrency()
             :amount="data?.numeroLiquidaciones"
           ></BlueCardComponent>
         </div>
-        <div class="grid grid-cols-2 gap-3">
-          <ListGroup
-            :debitoMiercoles="formatCurrency(data?.debitoMiercoles)"
-            :debitoJueves="formatCurrency(data?.debitoJueves)"
-            :debitoViernes="formatCurrency(data?.debitoViernes)"
-          ></ListGroup>
-          <YellowCardComponent
-            :title="'Total Debito'"
-            :amount="formatCurrency(data?.debitoTotal)"
-          ></YellowCardComponent>
-        </div>
+
+        <ListGroup
+          :debitoMiercoles="formatCurrency(data?.debitoMiercoles)"
+          :debitoJueves="formatCurrency(data?.debitoJueves)"
+          :debitoViernes="formatCurrency(data?.debitoViernes)"
+        ></ListGroup>
+
+        <YellowCardComponent
+          :title="'Total Debito'"
+          :amount="formatCurrency(data?.debitoTotal)"
+        ></YellowCardComponent>
 
         <CardGroup
           :primerTitulo="'Rendimiento'"
